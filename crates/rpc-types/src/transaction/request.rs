@@ -116,6 +116,7 @@ impl OpTransactionRequest {
                 }))
             }
             TypedTransaction::Eip7702(tx) => Ok(OpTypedTransaction::Eip7702(tx)),
+            TypedTransaction::Goat(_) => todo!(),
         }
     }
 }

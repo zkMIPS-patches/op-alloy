@@ -310,6 +310,7 @@ impl OpTxEnvelope {
             EthereumTxEnvelope::Eip1559(tx) => Ok(tx.into()),
             tx @ EthereumTxEnvelope::<T>::Eip4844(_) => Err(tx),
             EthereumTxEnvelope::Eip7702(tx) => Ok(tx.into()),
+            EthereumTxEnvelope::Goat(_) => todo!(),
         }
     }
 

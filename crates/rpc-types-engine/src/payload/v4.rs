@@ -2,11 +2,9 @@
 
 use alloc::vec::Vec;
 use alloy_consensus::Block;
-use alloy_eips::{Decodable2718, eip4895::Withdrawal};
-use alloy_primitives::{Address, B256, Bloom, Bytes, U256};
-use alloy_rpc_types_engine::{
-    BlobsBundleV1, ExecutionPayloadV1, ExecutionPayloadV2, ExecutionPayloadV3, PayloadError,
-};
+use alloy_eips::Decodable2718;
+use alloy_primitives::{B256, Bytes, U256};
+use alloy_rpc_types_engine::{BlobsBundleV1, ExecutionPayloadV3, PayloadError};
 
 /// The Opstack execution payload for `newPayloadV4` of the engine API introduced with isthmus.
 /// See also <https://specs.optimism.io/protocol/isthmus/exec-engine.html#engine_newpayloadv4-api>
@@ -86,6 +84,10 @@ impl ssz::Decode for OpExecutionPayloadV4 {
     }
 
     fn from_ssz_bytes(bytes: &[u8]) -> Result<Self, ssz::DecodeError> {
+        use alloy_eips::eip4895::Withdrawal;
+        use alloy_primitives::{Address, Bloom};
+        use alloy_rpc_types_engine::{ExecutionPayloadV1, ExecutionPayloadV2};
+
         let mut builder = ssz::SszDecoderBuilder::new(bytes);
 
         builder.register_type::<B256>()?;
@@ -145,6 +147,8 @@ impl ssz::Encode for OpExecutionPayloadV4 {
     }
 
     fn ssz_append(&self, buf: &mut Vec<u8>) {
+        use alloy_primitives::{Address, Bloom};
+
         let offset = <B256 as ssz::Encode>::ssz_fixed_len() * 6
             + <Address as ssz::Encode>::ssz_fixed_len()
             + <Bloom as ssz::Encode>::ssz_fixed_len()
